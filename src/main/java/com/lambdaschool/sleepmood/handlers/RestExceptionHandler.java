@@ -1,7 +1,7 @@
 package com.lambdaschool.sleepmood.handlers;
 
-import com.lambdaschool.starthere.exceptions.ResourceNotFoundException;
-import com.lambdaschool.starthere.models.ErrorDetail;
+import com.lambdaschool.sleepmood.exceptions.ResourceNotFoundException;
+import com.lambdaschool.sleepmood.models.ErrorDetail;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;

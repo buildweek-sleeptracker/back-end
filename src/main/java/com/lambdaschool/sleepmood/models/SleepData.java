@@ -20,7 +20,6 @@ public class SleepData {
     * hoursslept
     *
     * averagemood
-    *
     */
 
     @Id
