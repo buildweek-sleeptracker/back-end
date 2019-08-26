@@ -32,6 +32,11 @@ public class User extends Auditable
     @JsonIgnoreProperties("user")
     private List<UserRoles> userRoles = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("user")
+    private List<SleepData> sleepdata = new ArrayList<>();
+
     public User()
     {
     }
@@ -45,6 +50,18 @@ public class User extends Auditable
             ur.setUser(this);
         }
         this.userRoles = userRoles;
+    }
+
+    public User(String username, String password, List<UserRoles> userRoles, List<SleepData> sleepdata)
+    {
+        setUsername(username);
+        setPassword(password);
+        for (UserRoles ur : userRoles)
+        {
+            ur.setUser(this);
+        }
+        this.userRoles = userRoles;
+        this.sleepdata = sleepdata;
     }
 
     public long getUserid()
@@ -105,5 +122,13 @@ public class User extends Auditable
         }
 
         return rtnList;
+    }
+
+    public List<SleepData> getSleepdata() {
+        return sleepdata;
+    }
+
+    public void setSleepdata(List<SleepData> sleepdata) {
+        this.sleepdata = sleepdata;
     }
 }

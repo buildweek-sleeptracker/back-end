@@ -44,6 +44,21 @@ public class UserServiceImpl implements UserDetailsService, UserService
         return userrepos.findById(id).orElseThrow(() -> new ResourceNotFoundException(Long.toString(id)));
     }
 
+    @Override
+    public User findUserByName(String name)
+    {
+        User currentUser = userrepos.findByUsername(name);
+
+        if (currentUser != null)
+        {
+            return currentUser;
+        }
+        else
+        {
+            throw new ResourceNotFoundException(name);
+        }
+    }
+
     public List<User> findAll()
     {
         List<User> list = new ArrayList<>();
