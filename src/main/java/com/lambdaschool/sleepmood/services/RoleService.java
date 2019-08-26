@@ -1,6 +1,6 @@
 package com.lambdaschool.sleepmood.services;
 
-import com.lambdaschool.starthere.models.Role;
+import com.lambdaschool.sleepmood.models.Role;
 
 import java.util.List;
 

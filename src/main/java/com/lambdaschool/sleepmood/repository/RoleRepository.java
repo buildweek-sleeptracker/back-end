@@ -1,6 +1,6 @@
 package com.lambdaschool.sleepmood.repository;
 
-import com.lambdaschool.starthere.models.Role;
+import com.lambdaschool.sleepmood.models.Role;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

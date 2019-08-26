@@ -1,7 +1,7 @@
 package com.lambdaschool.sleepmood.controllers;
 
-import com.lambdaschool.starthere.models.Role;
-import com.lambdaschool.starthere.services.RoleService;
+import com.lambdaschool.sleepmood.models.Role;
+import com.lambdaschool.sleepmood.services.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

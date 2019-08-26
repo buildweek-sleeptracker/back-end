@@ -1,8 +1,8 @@
 package com.lambdaschool.sleepmood.services;
 
-import com.lambdaschool.starthere.exceptions.ResourceNotFoundException;
-import com.lambdaschool.starthere.models.Role;
-import com.lambdaschool.starthere.repository.RoleRepository;
+import com.lambdaschool.sleepmood.exceptions.ResourceNotFoundException;
+import com.lambdaschool.sleepmood.models.Role;
+import com.lambdaschool.sleepmood.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

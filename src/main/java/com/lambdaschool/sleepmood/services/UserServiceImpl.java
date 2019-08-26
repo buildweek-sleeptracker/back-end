@@ -1,11 +1,10 @@
 package com.lambdaschool.sleepmood.services;
 
-import com.lambdaschool.starthere.exceptions.ResourceNotFoundException;
-import com.lambdaschool.starthere.models.Quote;
-import com.lambdaschool.starthere.models.User;
-import com.lambdaschool.starthere.models.UserRoles;
-import com.lambdaschool.starthere.repository.RoleRepository;
-import com.lambdaschool.starthere.repository.UserRepository;
+import com.lambdaschool.sleepmood.exceptions.ResourceNotFoundException;
+import com.lambdaschool.sleepmood.models.User;
+import com.lambdaschool.sleepmood.models.UserRoles;
+import com.lambdaschool.sleepmood.repository.RoleRepository;
+import com.lambdaschool.sleepmood.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -79,11 +78,6 @@ public class UserServiceImpl implements UserDetailsService, UserService
         }
         newUser.setUserRoles(newRoles);
 
-        for (Quote q : user.getQuotes())
-        {
-            newUser.getQuotes().add(new Quote(q.getQuote(), newUser));
-        }
-
         return userrepos.save(newUser);
     }
 
@@ -120,14 +114,6 @@ public class UserServiceImpl implements UserDetailsService, UserService
                     for (UserRoles ur : user.getUserRoles())
                     {
                         rolerepos.insertUserRoles(id, ur.getRole().getRoleid());
-                    }
-                }
-
-                if (user.getQuotes().size() > 0)
-                {
-                    for (Quote q : user.getQuotes())
-                    {
-                        currentUser.getQuotes().add(new Quote(q.getQuote(), currentUser));
                     }
                 }
 

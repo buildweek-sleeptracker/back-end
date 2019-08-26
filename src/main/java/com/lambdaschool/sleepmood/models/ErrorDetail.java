@@ -1,7 +1,7 @@
 package com.lambdaschool.sleepmood.models;
 
 
-import com.lambdaschool.starthere.exceptions.ValidationError;
+import com.lambdaschool.sleepmood.exceptions.ValidationError;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
