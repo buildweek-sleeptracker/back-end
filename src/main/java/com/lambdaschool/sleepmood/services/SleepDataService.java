@@ -12,11 +12,11 @@ public interface SleepDataService
 
     List<SleepData> getInterval(Date start, Date end, long userid);
 
-    SleepData getSingle(Date date, long userid);
+    SleepData getSingle(long sleepid, long userid);
 
-    void delete(long id);
+    void delete(long id, long userid);
 
     SleepData save(SleepData sleepData, long userid);
 
-    SleepData update(SleepData sleepData, long id);
+    SleepData update(SleepData sleepData, long id, long userid);
 }

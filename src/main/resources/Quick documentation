@@ -1,0 +1,69 @@
+MODELS:
+
+User:
+
+    - long          id          (auto)
+    - String        username    (input)
+    - String        password    (input)
+    - ArrayList     UserRoles   (un-needed)
+    - ArrayList     sleepData   (un-needed)
+
+    Creating a user(not yet set up) or logging in:
+
+		This part is different because OAuth2 requires a specific format!
+
+		*****
+		In your Headers when logging in, you need this authorization property:
+		headers: {
+            Authorization: "Basic bGFtYmRhLWNsaWVudDpsYW1iZGEtc2VjcmV0"
+        }
+		(Once you're logged in, this can be set to the auth token)
+
+        The body must be a string formatted like this one:
+        `grant_type=password&username=${creds.username}&password=${creds.password}`
+        *****
+
+        What the string is as a JS object:
+        loginUser = {
+            grant_type: "password",
+            username: this.state.username,
+            password: this.state.password,
+            client_id: "lambda-client",
+            client_secret: "lambda-secret"
+        }
+		(Remember, the server will NOT accept JSON. I wish it did, but it requires the format used above)
+
+SleepData:
+
+    - long          id          (auto)
+    - User          user        (auto)
+    - LocalDateTime sleepdate   (input)
+    - LocalDateTime wakedate    (input)
+    - int           sleepmood   (input)
+    - int           wakemood    (input)
+    - int           avgmood     (input)
+
+    Creating a new SleepData:
+    newSleepData = {
+        sleepdate: [2019, 7, 15, 21, 00]
+        wakedate:  [2019, 7, 16,  6, 00] (CANNOT BE AN EMPTY ARRAY!)
+        sleepmood: 4 (Best mood)
+        wakemood:  2 (Bad-ish mood)
+        avgmood:   0 (Mood not defined yet)
+    }
+
+*****
+LocalDateTime is kinda like an Array:
+    [2019, 7, 4, 21, 30] = July 4th, 2019 21:30
+    As long as you can pass an array this way, you're good!
+*****
+
+ENDPOINTS:
+
+    base URL = "https://sleep-mood-db.herokuapp.com/"
+
+    login = "/login"
+
+    get ALL sleepData, sorted by date (oldest to newest) = "/sleep/all"
+
+    add a new sleepData = "/sleep/new"

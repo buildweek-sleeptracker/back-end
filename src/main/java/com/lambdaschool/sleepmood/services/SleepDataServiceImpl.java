@@ -45,17 +45,33 @@ public class SleepDataServiceImpl implements SleepDataService
     }
 
     @Override
-    public SleepData getSingle(Date date, long userid) {
-        return null;
+    public SleepData getSingle(long sleepid, long userid) throws ResourceNotFoundException
+    {
+
+        SleepData rtnSleepData = sleeprepo.findById(sleepid).orElseThrow(() -> new ResourceNotFoundException(Long.toString(sleepid)));
+        if (rtnSleepData.getUser().getUserid() != userid)
+        {
+            throw new ResourceNotFoundException("SleepData does not belong to current user");
+        }
+        return rtnSleepData;
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(long id, long userid) throws ResourceNotFoundException
+    {
+        // Checking to make sure SleepData exists AND belongs to currently logged in user
+        SleepData newSleepData = sleeprepo.findById(id).orElseThrow(() -> new ResourceNotFoundException(Long.toString(id)));
 
+        if (newSleepData.getUser().getUserid() != userid)
+        {
+            throw new ResourceNotFoundException("SleepData does not belong to current user");
+        }
+
+        sleeprepo.deleteById(id);
     }
 
     @Override
-    public SleepData save(SleepData sleepData, long userid)
+    public SleepData save(SleepData sleepData, long userid) throws ResourceNotFoundException
     {
 
         User user = userrepo.findById(userid).orElseThrow(() -> new ResourceNotFoundException(Long.toString(userid)));
@@ -73,7 +89,32 @@ public class SleepDataServiceImpl implements SleepDataService
     }
 
     @Override
-    public SleepData update(SleepData sleepData, long id) {
-        return null;
+    public SleepData update(SleepData sleepData, long id, long userid) throws ResourceNotFoundException
+    {
+        SleepData newSleepData = sleeprepo.findById(id).orElseThrow(() -> new ResourceNotFoundException(Long.toString(id)));
+
+        if (newSleepData.getUser().getUserid() != userid)
+        {
+            throw new ResourceNotFoundException("SleepData does not belong to current user");
+        }
+
+        if (sleepData.getAvgmood() != 0)
+        {
+            newSleepData.setAvgmood(sleepData.getAvgmood());
+        }
+        if (sleepData.getSleepdate() != null) {
+            newSleepData.setSleepdate(sleepData.getSleepdate());
+        }
+        if (sleepData.getSleepmood() != 0) {
+            newSleepData.setSleepmood(sleepData.getSleepmood());
+        }
+        if (sleepData.getWakedate() != null) {
+            newSleepData.setWakedate(sleepData.getWakedate());
+        }
+        if (sleepData.getWakemood() != 0) {
+            newSleepData.setWakemood(sleepData.getWakemood());
+        }
+
+        return sleeprepo.save(newSleepData);
     }
 }
