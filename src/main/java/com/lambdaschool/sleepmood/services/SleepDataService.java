@@ -16,7 +16,7 @@ public interface SleepDataService
 
     void delete(long id);
 
-    SleepData save(SleepData sleepData);
+    SleepData save(SleepData sleepData, long userid);
 
     SleepData update(SleepData sleepData, long id);
 }

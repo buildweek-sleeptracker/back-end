@@ -1,12 +1,17 @@
 package com.lambdaschool.sleepmood.services;
 
+import com.lambdaschool.sleepmood.exceptions.ResourceNotFoundException;
 import com.lambdaschool.sleepmood.models.SleepData;
+import com.lambdaschool.sleepmood.models.User;
 import com.lambdaschool.sleepmood.repository.SleepDataRepository;
+import com.lambdaschool.sleepmood.repository.UserRepository;
+import com.lambdaschool.sleepmood.utilities.SortSleepDataByDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -16,11 +21,21 @@ public class SleepDataServiceImpl implements SleepDataService
     @Autowired
     SleepDataRepository sleeprepo;
 
+    @Autowired
+    UserRepository userrepo;
+
     @Override
     public List<SleepData> getAll(Pageable pageable, long userid) {
 
         List<SleepData> rtnList = new ArrayList<>();
-        sleeprepo.findAll(pageable).iterator().forEachRemaining(rtnList::add);
+        sleeprepo.findAll(pageable).iterator().forEachRemaining(sd -> {
+            if (sd.getUser().getUserid() == userid)
+            {
+                rtnList.add(sd);
+            }
+        });
+
+        Collections.sort(rtnList, new SortSleepDataByDate());
         return rtnList;
     }
 
@@ -40,14 +55,17 @@ public class SleepDataServiceImpl implements SleepDataService
     }
 
     @Override
-    public SleepData save(SleepData sleepData) {
+    public SleepData save(SleepData sleepData, long userid)
+    {
+
+        User user = userrepo.findById(userid).orElseThrow(() -> new ResourceNotFoundException(Long.toString(userid)));
 
         SleepData newSleepData = new SleepData();
 
         newSleepData.setAvgmood(sleepData.getAvgmood());
         newSleepData.setSleepdate(sleepData.getSleepdate());
         newSleepData.setSleepmood(sleepData.getSleepmood());
-        newSleepData.setUser(sleepData.getUser());
+        newSleepData.setUser(user);
         newSleepData.setWakedate(sleepData.getWakedate());
         newSleepData.setWakemood(sleepData.getWakemood());
 
