@@ -20,7 +20,7 @@ public class SleepDataServiceImpl implements SleepDataService
     public List<SleepData> getAll(Pageable pageable, long userid) {
 
         List<SleepData> rtnList = new ArrayList<>();
-        sleeprepo.findAll().iterator().forEachRemaining(rtnList::add);
+        sleeprepo.findAll(pageable).iterator().forEachRemaining(rtnList::add);
         return rtnList;
     }
 
@@ -41,7 +41,17 @@ public class SleepDataServiceImpl implements SleepDataService
 
     @Override
     public SleepData save(SleepData sleepData) {
-        return null;
+
+        SleepData newSleepData = new SleepData();
+
+        newSleepData.setAvgmood(sleepData.getAvgmood());
+        newSleepData.setSleepdate(sleepData.getSleepdate());
+        newSleepData.setSleepmood(sleepData.getSleepmood());
+        newSleepData.setUser(sleepData.getUser());
+        newSleepData.setWakedate(sleepData.getWakedate());
+        newSleepData.setWakemood(sleepData.getWakemood());
+
+        return sleeprepo.save(newSleepData);
     }
 
     @Override

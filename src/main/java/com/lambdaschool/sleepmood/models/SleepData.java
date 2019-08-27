@@ -3,7 +3,7 @@ package com.lambdaschool.sleepmood.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "sleepdata")
@@ -29,19 +29,17 @@ public class SleepData {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user")
-    @JsonIgnoreProperties("sleepdata")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userid",
+                nullable = false)
+    @JsonIgnoreProperties({"sleepdata", "hibernateLazyInitializer"})
     private User user;
 
     @Column(nullable = false)
-    private Date sleepdate;
+    private LocalDateTime sleepdate;
 
     @Column(nullable = false)
-    private Date wakedate;
-
-    @Column(nullable = false)
-    private int hoursslept;
+    private LocalDateTime wakedate;
 
     @Column(nullable = false)
     private int sleepmood;
@@ -54,11 +52,17 @@ public class SleepData {
 
     public SleepData() {}
 
-    public SleepData(User user, Date sleepdate, Date wakedate, int hoursslept, int sleepmood, int wakemood, int avgmood) {
+    public SleepData(User user, LocalDateTime sleepdate, LocalDateTime wakedate, int sleepmood, int wakemood, int avgmood) {
         this.user = user;
         this.sleepdate = sleepdate;
         this.wakedate = wakedate;
-        this.hoursslept = hoursslept;
+        this.sleepmood = sleepmood;
+        this.wakemood = wakemood;
+        this.avgmood = avgmood;
+    }
+    public SleepData(LocalDateTime sleepdate, LocalDateTime wakedate, int sleepmood, int wakemood, int avgmood) {
+        this.sleepdate = sleepdate;
+        this.wakedate = wakedate;
         this.sleepmood = sleepmood;
         this.wakemood = wakemood;
         this.avgmood = avgmood;
@@ -80,28 +84,20 @@ public class SleepData {
         this.user = user;
     }
 
-    public Date getSleepdate() {
+    public LocalDateTime getSleepdate() {
         return sleepdate;
     }
 
-    public void setSleepdate(Date sleepdate) {
+    public void setSleepdate(LocalDateTime sleepdate) {
         this.sleepdate = sleepdate;
     }
 
-    public Date getWakedate() {
+    public LocalDateTime getWakedate() {
         return wakedate;
     }
 
-    public void setWakedate(Date wakedate) {
+    public void setWakedate(LocalDateTime wakedate) {
         this.wakedate = wakedate;
-    }
-
-    public int getHoursslept() {
-        return hoursslept;
-    }
-
-    public void setHoursslept(int hoursslept) {
-        this.hoursslept = hoursslept;
     }
 
     public int getSleepmood() {

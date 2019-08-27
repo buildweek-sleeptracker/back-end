@@ -1,6 +1,7 @@
 package com.lambdaschool.sleepmood.services;
 
 import com.lambdaschool.sleepmood.exceptions.ResourceNotFoundException;
+import com.lambdaschool.sleepmood.models.SleepData;
 import com.lambdaschool.sleepmood.models.User;
 import com.lambdaschool.sleepmood.models.UserRoles;
 import com.lambdaschool.sleepmood.repository.RoleRepository;
@@ -92,6 +93,17 @@ public class UserServiceImpl implements UserDetailsService, UserService
             newRoles.add(new UserRoles(newUser, ur.getRole()));
         }
         newUser.setUserRoles(newRoles);
+
+        for (SleepData sd : user.getSleepdata())
+        {
+            newUser.getSleepdata().add(new SleepData(newUser,
+                                                     sd.getSleepdate(),
+                                                     sd.getWakedate(),
+                                                     sd.getSleepmood(),
+                                                     sd.getWakemood(),
+                                                     sd.getAvgmood())
+                                                    );
+        }
 
         return userrepos.save(newUser);
     }

@@ -32,6 +32,7 @@ public class User extends Auditable
     @JsonIgnoreProperties("user")
     private List<UserRoles> userRoles = new ArrayList<>();
 
+    @Column
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL)
     @JsonIgnoreProperties("user")
@@ -61,6 +62,10 @@ public class User extends Auditable
             ur.setUser(this);
         }
         this.userRoles = userRoles;
+        for (SleepData sd : sleepdata)
+        {
+            sd.setUser(this);
+        }
         this.sleepdata = sleepdata;
     }
 
