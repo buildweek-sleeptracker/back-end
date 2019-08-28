@@ -1,5 +1,6 @@
 package com.lambdaschool.sleepmood.handlers;
 
+import com.lambdaschool.sleepmood.exceptions.BadRequestException;
 import com.lambdaschool.sleepmood.exceptions.ResourceNotFoundException;
 import com.lambdaschool.sleepmood.models.ErrorDetail;
 import org.springframework.beans.TypeMismatchException;
@@ -36,6 +37,20 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
         errorDetail.setTitle("Resource Not Found");
         errorDetail.setDetail(rnfe.getMessage());
         errorDetail.setDeveloperMessage(rnfe.getClass().getName());
+
+        return new ResponseEntity<>(errorDetail, null, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({BadRequestException.class})
+    public ResponseEntity<?> handleBadRequestException(BadRequestException bre, HttpServletRequest request)
+    {
+
+        ErrorDetail errorDetail = new ErrorDetail();
+        errorDetail.setTimestamp(new Date().getTime());
+        errorDetail.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorDetail.setTitle("Bad Request");
+        errorDetail.setDetail(bre.getMessage());
+        errorDetail.setDeveloperMessage(bre.getClass().getName());
 
         return new ResponseEntity<>(errorDetail, null, HttpStatus.NOT_FOUND);
     }

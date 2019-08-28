@@ -47,12 +47,12 @@ public class SleepDataController
     UserService userService;
 
     @GetMapping(value = "/all", produces = {"application/json"})
-    public ResponseEntity<?> getAll(HttpServletRequest request, @PageableDefault(size = 30) Pageable pageable, Authentication authentication)
+    public ResponseEntity<?> getAll(HttpServletRequest request, Authentication authentication)
     {
         logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
         long userid = findLoggedInUser(authentication);
 
-        List<SleepData> rtnList = sleepDataService.getAll(pageable, userid);
+        List<SleepData> rtnList = sleepDataService.getAll(userid);
         return new ResponseEntity<>(rtnList, HttpStatus.OK);
     }
 
@@ -62,8 +62,26 @@ public class SleepDataController
         logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
         long userid = findLoggedInUser(auth);
 
-//        List<SleepData> rtnList = sleepDataService.getAll(userid);
-        return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        List<SleepData> rtnList = sleepDataService.getMonth(userid, yearid, monthid);
+        return new ResponseEntity<>(rtnList, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/week/{yearid}/{monthid}/{weekid}", produces = {"application/json"})
+    public ResponseEntity<?> getByWeek(HttpServletRequest request, @PathVariable int yearid, @PathVariable int monthid, @PathVariable int weekid, Authentication auth) {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
+        long userid = findLoggedInUser(auth);
+
+        List<SleepData> rtnList = sleepDataService.getWeek(userid, yearid, monthid, weekid);
+        return new ResponseEntity<>(rtnList, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/day/{yearid}/{monthid}/{dayid}", produces = {"application/json"})
+    public ResponseEntity<?> getByDay(HttpServletRequest request, @PathVariable int yearid, @PathVariable int monthid, @PathVariable int dayid, Authentication auth) {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
+        long userid = findLoggedInUser(auth);
+
+        SleepData rtnSleepData = sleepDataService.getDay(userid, yearid, monthid, dayid);
+        return new ResponseEntity<>(rtnSleepData, HttpStatus.OK);
     }
 
     @GetMapping(value = "/id/{id}", produces = {"application/json"})

@@ -8,9 +8,13 @@ import java.util.List;
 
 public interface SleepDataService
 {
-    List<SleepData> getAll(Pageable pageable, long userid);
+    List<SleepData> getAll(long userid);
 
-    List<SleepData> getInterval(Date start, Date end, long userid);
+    List<SleepData> getMonth(long userid, long yearid, long monthid);
+
+    List<SleepData> getWeek(long userid, long yearid, long monthid, long weekid);
+
+    SleepData getDay(long userid, long yearid, long monthid, long dayid);
 
     SleepData getSingle(long sleepid, long userid);
 

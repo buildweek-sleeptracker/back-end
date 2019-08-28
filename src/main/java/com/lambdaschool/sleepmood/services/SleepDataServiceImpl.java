@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service(value = "sleepDataService")
 public class SleepDataServiceImpl implements SleepDataService
@@ -25,10 +22,10 @@ public class SleepDataServiceImpl implements SleepDataService
     UserRepository userrepo;
 
     @Override
-    public List<SleepData> getAll(Pageable pageable, long userid) {
+    public List<SleepData> getAll(long userid) {
 
         List<SleepData> rtnList = new ArrayList<>();
-        sleeprepo.findAll(pageable).iterator().forEachRemaining(sd -> {
+        sleeprepo.findAll().iterator().forEachRemaining(sd -> {
             if (sd.getUser().getUserid() == userid)
             {
                 rtnList.add(sd);
@@ -40,8 +37,68 @@ public class SleepDataServiceImpl implements SleepDataService
     }
 
     @Override
-    public List<SleepData> getInterval(Date start, Date end, long userid) {
-        return null;
+    public List<SleepData> getMonth(long userid, long yearid, long monthid)
+    {
+        List<SleepData> rtnList = new ArrayList<>();
+        sleeprepo.findAll().iterator().forEachRemaining(sd -> {
+            if (sd.getUser().getUserid() == userid &&
+                sd.getWakedate().getYear() == yearid &&
+                sd.getWakedate().getMonthValue() == monthid)
+            {
+                rtnList.add(sd);
+            }
+        });
+
+        Collections.sort(rtnList, new SortSleepDataByDate());
+        return rtnList;
+    }
+
+    @Override
+    public List<SleepData> getWeek(long userid, long yearid, long monthid, long weekid)
+    {
+        List<SleepData> rtnList = new ArrayList<>();
+        sleeprepo.findAll().iterator().forEachRemaining(sd -> {
+            if (sd.getUser().getUserid() == userid &&
+                    sd.getWakedate().getYear() == yearid &&
+                    sd.getWakedate().getMonthValue() == monthid)
+            {
+                if (sd.getWakedate().getDayOfMonth() == weekid ||
+                        sd.getWakedate().getDayOfMonth() == weekid +1 ||
+                        sd.getWakedate().getDayOfMonth() == weekid +2 ||
+                        sd.getWakedate().getDayOfMonth() == weekid +3 ||
+                        sd.getWakedate().getDayOfMonth() == weekid +4 ||
+                        sd.getWakedate().getDayOfMonth() == weekid +5 ||
+                        sd.getWakedate().getDayOfMonth() == weekid +6)
+                {
+                    rtnList.add(sd);
+                }
+            }
+        });
+
+        Collections.sort(rtnList, new SortSleepDataByDate());
+        return rtnList;
+    }
+
+    @Override
+    public SleepData getDay(long userid, long yearid, long monthid, long dayid) throws ResourceNotFoundException
+    {
+        List<SleepData> rtnList = new ArrayList<>();
+        sleeprepo.findAll().iterator().forEachRemaining(sd -> {
+            if (sd.getUser().getUserid() == userid &&
+                    sd.getWakedate().getYear() == yearid &&
+                    sd.getWakedate().getMonthValue() == monthid &&
+                    sd.getWakedate().getDayOfMonth() == dayid)
+            {
+                rtnList.add(sd);
+            }
+        });
+
+        if (rtnList.get(0) == null)
+        {
+            throw new ResourceNotFoundException("Could not find any sleep data linked to " + monthid + "/" + dayid + "/" + yearid + ".");
+        }
+
+        return rtnList.get(0);
     }
 
     @Override

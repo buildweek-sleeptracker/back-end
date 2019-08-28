@@ -1,5 +1,6 @@
 package com.lambdaschool.sleepmood.services;
 
+import com.lambdaschool.sleepmood.exceptions.BadRequestException;
 import com.lambdaschool.sleepmood.exceptions.ResourceNotFoundException;
 import com.lambdaschool.sleepmood.models.SleepData;
 import com.lambdaschool.sleepmood.models.User;
@@ -81,8 +82,12 @@ public class UserServiceImpl implements UserDetailsService, UserService
 
     @Transactional
     @Override
-    public User save(User user)
+    public User save(User user) throws BadRequestException
     {
+        if (userrepos.findByUsername(user.getUsername()) != null)
+        {
+            throw new BadRequestException("Username is already taken");
+        }
         User newUser = new User();
         newUser.setUsername(user.getUsername());
         newUser.setPasswordNoEncrypt(user.getPassword());

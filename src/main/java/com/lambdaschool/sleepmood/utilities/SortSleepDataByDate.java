@@ -8,6 +8,6 @@ public class SortSleepDataByDate implements Comparator<SleepData>
 {
     public int compare(SleepData a, SleepData b)
     {
-        return b.getSleepdate().compareTo(a.getSleepdate());
+        return a.getSleepdate().compareTo(b.getSleepdate());
     }
 }
