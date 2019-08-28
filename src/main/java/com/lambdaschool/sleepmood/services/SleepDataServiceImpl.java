@@ -7,7 +7,6 @@ import com.lambdaschool.sleepmood.repository.SleepDataRepository;
 import com.lambdaschool.sleepmood.repository.UserRepository;
 import com.lambdaschool.sleepmood.utilities.SortSleepDataByDate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -135,7 +134,7 @@ public class SleepDataServiceImpl implements SleepDataService
 
         SleepData newSleepData = new SleepData();
 
-        newSleepData.setAvgmood(sleepData.getAvgmood());
+        newSleepData.setDaymood(sleepData.getDaymood());
         newSleepData.setSleepdate(sleepData.getSleepdate());
         newSleepData.setSleepmood(sleepData.getSleepmood());
         newSleepData.setUser(user);
@@ -155,9 +154,9 @@ public class SleepDataServiceImpl implements SleepDataService
             throw new ResourceNotFoundException("SleepData does not belong to current user");
         }
 
-        if (sleepData.getAvgmood() != 0)
+        if (sleepData.getDaymood() != 0)
         {
-            newSleepData.setAvgmood(sleepData.getAvgmood());
+            newSleepData.setDaymood(sleepData.getDaymood());
         }
         if (sleepData.getSleepdate() != null) {
             newSleepData.setSleepdate(sleepData.getSleepdate());

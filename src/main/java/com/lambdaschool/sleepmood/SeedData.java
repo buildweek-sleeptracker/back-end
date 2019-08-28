@@ -65,7 +65,7 @@ public class SeedData implements CommandLineRunner
         admins.add(new UserRoles(new User(), r1));
         admins.add(new UserRoles(new User(), r2));
         admins.add(new UserRoles(new User(), r3));
-        User u1 = new User("admin", "password", admins);
+        User u1 = new User("Admi", "En", "ad@min.com", "password", admins);
 
         for (int i = 1; i <= 29; i++)
         {
@@ -84,23 +84,23 @@ public class SeedData implements CommandLineRunner
         ArrayList<UserRoles> datas = new ArrayList<>();
         datas.add(new UserRoles(new User(), r3));
         datas.add(new UserRoles(new User(), r2));
-        User u2 = new User("cinnamon", "1234567", datas);
+        User u2 = new User("Shinna", "Mon", "c@min.com", "1234567", datas);
         userService.save(u2);
 
         // user
         ArrayList<UserRoles> users = new ArrayList<>();
         users.add(new UserRoles(new User(), r2));
-        User u3 = new User("barnbarn", "ILuvM4th!", users);
+        User u3 = new User("Barn", "Barn", "barn@barn.com", "ILuvM4th!", users);
         userService.save(u3);
 
         users = new ArrayList<>();
         users.add(new UserRoles(new User(), r2));
-        User u4 = new User("Bob", "password", users);
+        User u4 = new User("Bob", "Whitman", "b@min.com", "password", users);
         userService.save(u4);
 
         users = new ArrayList<>();
         users.add(new UserRoles(new User(), r2));
-        User u5 = new User("Jane", "password", users);
+        User u5 = new User("Jane", "Doe", "j@doe.com", "password", users);
         userService.save(u5);
 
 

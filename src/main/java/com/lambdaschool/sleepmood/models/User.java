@@ -21,7 +21,15 @@ public class User extends Auditable
 
     @Column(nullable = false,
             unique = true)
-    private String username;
+    private String firstname;
+
+    @Column(nullable = false,
+            unique = true)
+    private String lastname;
+
+    @Column(nullable = false,
+            unique = true)
+    private String email;
 
     @Column(nullable = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -42,9 +50,11 @@ public class User extends Auditable
     {
     }
 
-    public User(String username, String password, List<UserRoles> userRoles)
+    public User(String firstname, String lastname, String email, String password, List<UserRoles> userRoles)
     {
-        setUsername(username);
+        setFirstname(firstname);
+        setLastname(lastname);
+        setEmail(email);
         setPassword(password);
         for (UserRoles ur : userRoles)
         {
@@ -53,9 +63,11 @@ public class User extends Auditable
         this.userRoles = userRoles;
     }
 
-    public User(String username, String password, List<UserRoles> userRoles, List<SleepData> sleepdata)
+    public User(String firstname, String lastname, String email, String password, List<UserRoles> userRoles, List<SleepData> sleepdata)
     {
-        setUsername(username);
+        setFirstname(firstname);
+        setLastname(lastname);
+        setEmail(email);
         setPassword(password);
         for (UserRoles ur : userRoles)
         {
@@ -79,14 +91,30 @@ public class User extends Auditable
         this.userid = userid;
     }
 
-    public String getUsername()
-    {
-        return username;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setUsername(String username)
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getEmail()
     {
-        this.username = username;
+        return email;
+    }
+
+    public void setEmail(String email)
+    {
+        this.email = email;
     }
 
     public String getPassword()

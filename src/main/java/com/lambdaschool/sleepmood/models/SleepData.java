@@ -48,24 +48,24 @@ public class SleepData {
     private int wakemood;
 
     @Column(nullable = false)
-    private int avgmood;
+    private int daymood;
 
     public SleepData() {}
 
-    public SleepData(User user, LocalDateTime sleepdate, LocalDateTime wakedate, int sleepmood, int wakemood, int avgmood) {
+    public SleepData(User user, LocalDateTime sleepdate, LocalDateTime wakedate, int sleepmood, int wakemood, int daymood) {
         this.user = user;
         this.sleepdate = sleepdate;
         this.wakedate = wakedate;
         this.sleepmood = sleepmood;
         this.wakemood = wakemood;
-        this.avgmood = avgmood;
+        this.daymood = daymood;
     }
-    public SleepData(LocalDateTime sleepdate, LocalDateTime wakedate, int sleepmood, int wakemood, int avgmood) {
+    public SleepData(LocalDateTime sleepdate, LocalDateTime wakedate, int sleepmood, int wakemood, int daymood) {
         this.sleepdate = sleepdate;
         this.wakedate = wakedate;
         this.sleepmood = sleepmood;
         this.wakemood = wakemood;
-        this.avgmood = avgmood;
+        this.daymood = daymood;
     }
 
     public long getId() {
@@ -116,11 +116,11 @@ public class SleepData {
         this.wakemood = wakemood;
     }
 
-    public int getAvgmood() {
-        return avgmood;
+    public int getDaymood() {
+        return daymood;
     }
 
-    public void setAvgmood(int avgmood) {
-        this.avgmood = avgmood;
+    public void setDaymood(int daymood) {
+        this.daymood = daymood;
     }
 }

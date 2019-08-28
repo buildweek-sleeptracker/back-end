@@ -33,12 +33,12 @@ public class UserServiceImpl implements UserDetailsService, UserService
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
     {
-        User user = userrepos.findByUsername(username);
+        User user = userrepos.findByEmail(username);
         if (user == null)
         {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthority());
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.getAuthority());
     }
 
     public User findUserById(long id) throws ResourceNotFoundException
@@ -47,9 +47,9 @@ public class UserServiceImpl implements UserDetailsService, UserService
     }
 
     @Override
-    public User findUserByName(String name)
+    public User findUserByEmail(String email)
     {
-        User currentUser = userrepos.findByUsername(name);
+        User currentUser = userrepos.findByEmail(email);
 
         if (currentUser != null)
         {
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserDetailsService, UserService
         }
         else
         {
-            throw new ResourceNotFoundException(name);
+            throw new ResourceNotFoundException(email);
         }
     }
 
@@ -84,12 +84,15 @@ public class UserServiceImpl implements UserDetailsService, UserService
     @Override
     public User save(User user) throws BadRequestException
     {
-        if (userrepos.findByUsername(user.getUsername()) != null)
+        if (userrepos.findByEmail(user.getEmail()) != null)
         {
             throw new BadRequestException("Username is already taken");
         }
+
         User newUser = new User();
-        newUser.setUsername(user.getUsername());
+        newUser.setFirstname(user.getFirstname());
+        newUser.setLastname(user.getLastname());
+        newUser.setEmail(user.getEmail());
         newUser.setPasswordNoEncrypt(user.getPassword());
 
         ArrayList<UserRoles> newRoles = new ArrayList<>();
@@ -106,7 +109,7 @@ public class UserServiceImpl implements UserDetailsService, UserService
                                                      sd.getWakedate(),
                                                      sd.getSleepmood(),
                                                      sd.getWakemood(),
-                                                     sd.getAvgmood())
+                                                     sd.getDaymood())
                                                     );
         }
 
@@ -119,15 +122,25 @@ public class UserServiceImpl implements UserDetailsService, UserService
     public User update(User user, long id)
     {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = userrepos.findByUsername(authentication.getName());
+        User currentUser = userrepos.findByEmail(authentication.getName());
 
         if (currentUser != null)
         {
             if (id == currentUser.getUserid())
             {
-                if (user.getUsername() != null)
+                if (user.getFirstname() != null)
                 {
-                    currentUser.setUsername(user.getUsername());
+                    currentUser.setFirstname(user.getFirstname());
+                }
+
+                if (user.getLastname() != null)
+                {
+                    currentUser.setLastname(user.getLastname());
+                }
+
+                if (user.getEmail() != null)
+                {
+                    currentUser.setEmail(user.getEmail());
                 }
 
                 if (user.getPassword() != null)

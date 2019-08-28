@@ -3,7 +3,7 @@ MODELS:
 User:
 
     - long          id          (auto)
-    - String        username    (input)
+    - String        email    (input)
     - String        password    (input)
     - ArrayList     UserRoles   (un-needed)
     - ArrayList     sleepData   (un-needed)
@@ -20,13 +20,13 @@ User:
 		(Once you're logged in, this can be set to the auth token)
 
         The body must be a string formatted like this one:
-        `grant_type=password&username=${creds.username}&password=${creds.password}`
+        `grant_type=password&email=${creds.email}&password=${creds.password}`
         *****
 
         What the string is as a JS object:
         loginUser = {
             grant_type: "password",
-            username: this.state.username,
+            email: this.state.email,
             password: this.state.password,
             client_id: "lambda-client",
             client_secret: "lambda-secret"
@@ -41,7 +41,7 @@ SleepData:
     - LocalDateTime wakedate    (input)
     - int           sleepmood   (input)
     - int           wakemood    (input)
-    - int           avgmood     (input)
+    - int           daymood     (input)
 
     Creating a new SleepData:
     newSleepData = {
@@ -49,7 +49,7 @@ SleepData:
         wakedate:  [2019, 7, 16,  6, 00] (CANNOT BE AN EMPTY ARRAY!)
         sleepmood: 4 (Best mood)
         wakemood:  2 (Bad-ish mood)
-        avgmood:   0 (Mood not defined yet)
+        daymood:   0 (Mood not defined yet)
     }
 
 *****
@@ -62,32 +62,27 @@ ENDPOINTS:
 
     base URL = "https://sleep-mood-db.herokuapp.com/"
 
-    login = "/login"
-
-    get ALL sleepData, sorted by date (oldest to newest) = "/sleep/all"
-
-    add a new sleepData = "/sleep/new"
-
-
     *****
 
     LOGIN:
 
-    user = {username: "newuser", password: "newpassword"}
+    user = {email: "newuser", password: "newpassword"}
 
-    axiosLoginAuth().post("login", `grant_type=password&username=${user.username}&password=${user.password}`)
+    axiosLoginAuth().post("login", `grant_type=password&email=${user.email}&password=${user.password}`)
 
     ----------
 
     REGISTER:
 
-    user = {username: "newuser", password: "newpassword"}
+    user = {email: "newuser", password: "newpassword"}
 
-    axiosWithAuth().post("/createnewuser", user)
+    axios.post("https://sleep-mood-db.herokuapp.com//createnewuser", user)
+    ^ DO NOT INCLUDE HEADERS, or creating a user will fail.
+    ^ Because we're not using axiosWithAuth(), we need the full url here :checkmark:
 
-    Then, if creating a user is successful, you must login with the user creds:
+    If creating a user is successful, you must login with the user creds:
 
-    axiosLoginAuth().post("login", `grant_type=password&username=${user.username}&password=${user.password}`)
+    axiosLoginAuth().post("login", `grant_type=password&email=${user.email}&password=${user.password}`)
 
     ==========
 
@@ -127,14 +122,6 @@ ENDPOINTS:
 
     Example: "/sleep/id/39"
 
-    ----------
-
-    GET-SLEEPDATA-DAY:
-
-    axiosWithAuth().get("/sleep/day/:year/:day")
-
-    Example: "/sleep/day/2019/8/15"
-
     ==========
 
     POST-SLEEPDATA:
@@ -144,7 +131,7 @@ ENDPOINTS:
         wakedate: [2019, 7, 5, 6, 05]
         sleepmood: 5
         wakemood: 2
-        avgmood: 4
+        daymood: 4
     }
 
     axiosWithAuth().post("/sleep/new", newSleepData)
@@ -155,7 +142,7 @@ ENDPOINTS:
 
     newSleepData = {
         wakemood: 2
-        avgmood: 4
+        daymood: 4
     }
 
     axiosWithAuth().put("/sleep/update/:sleepDataId", newSleepData)
