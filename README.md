@@ -5,7 +5,13 @@ This is the full list of endpoints to connect to the Sleep Mood api.
 ## Base Url
 
 All endpoints listed below in this documentation require this baseURL:
-"
+`"https://sleep-mood-db.herokuapp.com/"`
+
+## Authentication
+
+When connecting to the server, it is required to include a specific Authorization in your Request Headers:
+* When logging in, The Authorization token contains the encoded `CLIENT_ID` and `CLIENT_SECRET` that match the server.
+* After logging in, the server will respond with an access token and token type. These must be included in request headers to authorize server requests.
 
 ## Login and Registration
 
