@@ -1,0 +1,174 @@
+MODELS:
+
+User:
+
+    - long          id          (auto)
+    - String        email    (input)
+    - String        password    (input)
+    - ArrayList     UserRoles   (un-needed)
+    - ArrayList     sleepData   (un-needed)
+
+    Creating a user(not yet set up) or logging in:
+
+		This part is different because OAuth2 requires a specific format!
+
+		*****
+		In your Headers when logging in, you need this authorization property:
+		headers: {
+            Authorization: "Basic bGFtYmRhLWNsaWVudDpsYW1iZGEtc2VjcmV0"
+        }
+		(Once you're logged in, this can be set to the auth token)
+
+        The body must be a string formatted like this one:
+        `grant_type=password&email=${creds.email}&password=${creds.password}`
+        *****
+
+        What the string is as a JS object:
+        loginUser = {
+            grant_type: "password",
+            email: this.state.email,
+            password: this.state.password,
+            client_id: "lambda-client",
+            client_secret: "lambda-secret"
+        }
+		(Remember, the server will NOT accept JSON. I wish it did, but it requires the format used above)
+
+SleepData:
+
+    - long          id          (auto)
+    - User          user        (auto)
+    - LocalDateTime sleepdate   (input)
+    - LocalDateTime wakedate    (input)
+    - int           sleepmood   (input)
+    - int           wakemood    (input)
+    - int           daymood     (input)
+
+    Creating a new SleepData:
+    newSleepData = {
+        sleepdate: [2019, 7, 15, 21, 00]
+        wakedate:  [2019, 7, 16,  6, 00] (CANNOT BE AN EMPTY ARRAY!)
+        sleepmood: 4 (Best mood)
+        wakemood:  2 (Bad-ish mood)
+        daymood:   0 (Mood not defined yet)
+    }
+
+*****
+LocalDateTime is kinda like an Array:
+    [2019, 7, 4, 21, 30] = July 4th, 2019 21:30
+    As long as you can pass an array this way, you're good!
+*****
+
+ENDPOINTS:
+
+    base URL = "https://sleep-mood-db.herokuapp.com/"
+
+    *****
+
+    LOGIN:
+
+    user = {email: "newuser", password: "newpassword"}
+
+    axiosLoginAuth().post("login", `grant_type=password&email=${user.email}&password=${user.password}`)
+
+    ----------
+
+    REGISTER:
+
+    user = {email: "newuser", password: "newpassword"}
+
+    axios.post("https://sleep-mood-db.herokuapp.com//createnewuser", user)
+    ^ DO NOT INCLUDE HEADERS, or creating a user will fail.
+    ^ Because we're not using axiosWithAuth(), we need the full url here :checkmark:
+
+    If creating a user is successful, you must login with the user creds:
+
+    axiosLoginAuth().post("login", `grant_type=password&email=${user.email}&password=${user.password}`)
+
+    ==========
+
+    GET-SLEEPDATA-ALL:
+
+    axiosWithAuth().get("/sleep/all")
+
+    ----------
+
+    GET-SLEEPDATA-MONTH:
+
+    axiosWithAuth().get("/sleep/month/:year/:month")
+
+    Example: "/sleep/month/2019/8"
+
+    ----------
+
+    GET-SLEEPDATA-WEEK:
+
+    axiosWithAuth().get("/sleep/week/:year/:firstdayofweek")
+
+    Example: "/sleep/week/2019/8/6"
+
+    ----------
+
+    GET-SLEEPDATA-DAY:
+
+    axiosWithAuth().get("/sleep/day/:year/:day")
+
+    Example: "/sleep/day/2019/8/15"
+
+    ----------
+
+    GET-SLEEPDATA-BY-ID:
+
+    axiosWithAuth().get("/sleep/id/:id")
+
+    Example: "/sleep/id/39"
+
+    ==========
+
+    POST-SLEEPDATA:
+
+    newSleepData = {
+        sleepdate: [2019, 7, 4, 23, 30]
+        wakedate: [2019, 7, 5, 6, 05]
+        sleepmood: 5
+        wakemood: 2
+        daymood: 4
+    }
+
+    axiosWithAuth().post("/sleep/new", newSleepData)
+
+    ----------
+
+    PUT-SLEEPDATA:
+
+    newSleepData = {
+        wakemood: 2
+        daymood: 4
+    }
+
+    axiosWithAuth().put("/sleep/update/:sleepDataId", newSleepData)
+
+    ----------
+
+    DELETE-SLEEPDATA
+
+    axiosWithAuth().delete("/sleep/delete/:sleepDataId")
+
+    *****
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
