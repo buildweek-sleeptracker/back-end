@@ -1,5 +1,6 @@
 package com.lambdaschool.sleepmood.services;
 
+import com.lambdaschool.sleepmood.exceptions.BadRequestException;
 import com.lambdaschool.sleepmood.exceptions.ResourceNotFoundException;
 import com.lambdaschool.sleepmood.models.SleepData;
 import com.lambdaschool.sleepmood.models.User;
@@ -127,10 +128,34 @@ public class SleepDataServiceImpl implements SleepDataService
     }
 
     @Override
-    public SleepData save(SleepData sleepData, long userid) throws ResourceNotFoundException
+    public SleepData save(SleepData sleepData, long userid) throws ResourceNotFoundException, BadRequestException
     {
 
+        // Error handling:
+        // User exists?
         User user = userrepo.findById(userid).orElseThrow(() -> new ResourceNotFoundException(Long.toString(userid)));
+
+        // Sleep Date and Wake Date cannot be the same?
+
+
+        // Sleep Data doesn't already exist?
+        List<SleepData> checkList = new ArrayList<>();
+        sleeprepo.findAll().iterator().forEachRemaining(checkList::add);
+        for (SleepData sd : checkList)
+        {
+            if (sd.getSleepdate().getYear() == sleepData.getSleepdate().getYear() &&
+                    sd.getSleepdate().getMonthValue() == sleepData.getSleepdate().getMonthValue() &&
+                    sd.getSleepdate().getDayOfMonth() == sleepData.getSleepdate().getDayOfMonth())
+            {
+                throw new BadRequestException("Sleep Entry already exists with the sleep date:" + sleepData.getSleepdate());
+            }
+            if (sd.getWakedate().getYear() == sleepData.getWakedate().getYear() &&
+                    sd.getWakedate().getMonthValue() == sleepData.getWakedate().getMonthValue() &&
+                    sd.getWakedate().getDayOfMonth() == sleepData.getWakedate().getDayOfMonth())
+            {
+                throw new BadRequestException("Sleep Entry already exists with the wake date:" + sleepData.getWakedate());
+            }
+        }
 
         SleepData newSleepData = new SleepData();
 
@@ -152,6 +177,33 @@ public class SleepDataServiceImpl implements SleepDataService
         if (newSleepData.getUser().getUserid() != userid)
         {
             throw new ResourceNotFoundException("SleepData does not belong to current user");
+        }
+
+        // Sleep Data doesn't already exist?
+        List<SleepData> checkList = new ArrayList<>();
+        sleeprepo.findAll().iterator().forEachRemaining(checkList::add);
+        for (SleepData sd : checkList)
+        {
+            if (sleepData.getSleepdate() != null &&
+                    (sleepData.getSleepdate().getYear() != newSleepData.getSleepdate().getYear() ||
+                    sleepData.getSleepdate().getMonthValue() != newSleepData.getSleepdate().getMonthValue() ||
+                    sleepData.getSleepdate().getDayOfMonth() != newSleepData.getSleepdate().getDayOfMonth())) {
+                if (sd.getSleepdate().getYear() == sleepData.getSleepdate().getYear() &&
+                        sd.getSleepdate().getMonthValue() == sleepData.getSleepdate().getMonthValue() &&
+                        sd.getSleepdate().getDayOfMonth() == sleepData.getSleepdate().getDayOfMonth()) {
+                    throw new BadRequestException("Sleep Entry already exists with the sleep date:" + sleepData.getSleepdate());
+                }
+            }
+            if (sleepData.getWakedate() != null &&
+                    (sleepData.getWakedate().getYear() != newSleepData.getWakedate().getYear() ||
+                    sleepData.getWakedate().getMonthValue() != newSleepData.getWakedate().getMonthValue() ||
+                    sleepData.getWakedate().getDayOfMonth() != newSleepData.getWakedate().getDayOfMonth())) {
+                if (sd.getWakedate().getYear() == sleepData.getWakedate().getYear() &&
+                        sd.getWakedate().getMonthValue() == sleepData.getWakedate().getMonthValue() &&
+                        sd.getWakedate().getDayOfMonth() == sleepData.getWakedate().getDayOfMonth()) {
+                    throw new BadRequestException("Sleep Entry already exists with the wake date:" + sleepData.getWakedate());
+                }
+            }
         }
 
         if (sleepData.getDaymood() != 0)

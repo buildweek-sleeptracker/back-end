@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Random;
 
-@Transactional
-@Component
+//@Transactional
+//@Component
 public class SeedData implements CommandLineRunner
 {
     @Autowired

@@ -52,7 +52,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
         errorDetail.setDetail(bre.getMessage());
         errorDetail.setDeveloperMessage(bre.getClass().getName());
 
-        return new ResponseEntity<>(errorDetail, null, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorDetail, null, HttpStatus.BAD_REQUEST);
     }
 
 

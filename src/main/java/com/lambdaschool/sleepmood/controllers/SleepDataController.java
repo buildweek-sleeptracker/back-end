@@ -29,7 +29,7 @@ public class SleepDataController
 
     long findLoggedInUser(Authentication auth) throws ResourceNotFoundException
     {
-        User user = userService.findUserByName(auth.getName());
+        User user = userService.findUserByEmail(auth.getName());
 
         if (user == null)
         {
