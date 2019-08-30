@@ -79,51 +79,60 @@ Example of formatted Sleep Data:
 }
 ```
 
-### Endpoints
-
-#### Get all Sleep Data
+### Get all Sleep Data
 
 **Endpoint:** "/sleep/all"
+
 **Method:** GET
 
 **Response:** Returns all sleep data for that user.
 
-#### Get Sleep Data by _Month_
+### Get Sleep Data by _Month_
 
 **Endpoint:** "/sleep/month/:year/:month"
+
 **Method:** GET
+
 **Request Params:** year(int), month(int)
 
 **Response:** Returns all sleep data for that user for the requested month.
 
-#### Get Sleep Data by _Week_
+### Get Sleep Data by _Week_
 
 **Endpoint:** "/sleep/week/:year/:month/:firstDayOfWeek"
+
 **Method:** GET
+
 **Request Params:** year(int), month(int), firstDayoftheWeek(int)
 
 **Response:** Returns all sleep data for that user- Server returns seven days of data, including the day requested.
 
-#### Get Sleep Data by _Day_
+### Get Sleep Data by _Day_
 
 **Endpoint:** "/sleep/day/:year/:month/:day"
+
 **Method:** GET
+
 **Request Params:** year(int), month(int), day(int)
 
 **Response:** Returns the sleep data for that user where the wakedate matches the requested year, month, and day.
 
-#### Get Sleep Data by _Id_
+### Get Sleep Data by _Id_
 
 **Endpoint:** "/sleep/id/:sleepDataId"
+
 **Method:** GET
+
 **Request Params:** sleepDataId(long)
 
 **Response:** Returns all sleep data for that user- Server returns seven days of data, including the day requested.
 
-#### Create new Sleep Data
+### Create new Sleep Data
 
 **Endpoint:** "/sleep/new"
+
 **Method:** POST
+
 **Request Body:** 
 ```
 {
@@ -137,11 +146,14 @@ Example of formatted Sleep Data:
 
 **Response:** Returns a status of 201, with no body.
 
-#### Edit existing Sleep Data
+### Edit existing Sleep Data
 
 **Endpoint:** "/sleep/update/:sleepDataId"
+
 **Method:** PUT
+
 **Request Params:** sleepDataId(long)
+
 **Request Body:** Any of these values can be missing. As long as there is at least one value, the server will update.
 ```
 {
@@ -155,11 +167,14 @@ Example of formatted Sleep Data:
 
 **Response:** Returns a status of 200, with no body.
 
-#### Delete Sleep Data
+### Delete Sleep Data
 
 **Endpoint:** "/sleep/delete/:sleepDataId"
+
 **Method:** DELETE
+
 **Request Params:** sleepDataId(long)
+
 **Request Body:** 
 ```
 {
