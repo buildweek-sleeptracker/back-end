@@ -140,7 +140,13 @@ public class SleepDataServiceImpl implements SleepDataService
 
         // Sleep Data doesn't already exist?
         List<SleepData> checkList = new ArrayList<>();
-        sleeprepo.findAll().iterator().forEachRemaining(checkList::add);
+        sleeprepo.findAll().iterator().forEachRemaining(sd ->
+        {
+            if (sd.getUser().getUserid() == user.getUserid())
+            {
+                checkList.add(sd);
+            }
+        });
         for (SleepData sd : checkList)
         {
             if (sd.getSleepdate().getYear() == sleepData.getSleepdate().getYear() &&
